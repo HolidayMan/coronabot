@@ -55,6 +55,9 @@ def handle_city(message):
 
 def handle_address(message):
     if message.text == BACK_TO_MENU_BUTTON.text:
+        user = TgUser.objects.get(tg_id=message.chat.id)
+        order = Order.objects.filter(user=user).order_by("-id")[0]
+        order.delete()
         return back_to_menu_handler(message)
     else:
         user = TgUser.objects.get(tg_id=message.chat.id)
@@ -67,6 +70,9 @@ def handle_address(message):
 
 def handle_phone(message):
     if message.text == BACK_TO_MENU_BUTTON.text:
+        user = TgUser.objects.get(tg_id=message.chat.id)
+        order = Order.objects.filter(user=user).order_by("-id")[0]
+        order.delete()
         return back_to_menu_handler(message)
     phone_pattern = r"(\+)*(7|){0,1}([0-9]){7,11}$"
     if not re.match(phone_pattern, message.text):
@@ -83,6 +89,9 @@ def handle_phone(message):
 
 def handle_amount(message):
     if message.text == BACK_TO_MENU_BUTTON.text:
+        user = TgUser.objects.get(tg_id=message.chat.id)
+        order = Order.objects.filter(user=user).order_by("-id")[0]
+        order.delete()
         return back_to_menu_handler(message)
     try:
         amount = int(message.text)
