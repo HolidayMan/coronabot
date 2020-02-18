@@ -1,16 +1,20 @@
 import os
-import time
+import sys
 import telebot
 
+import threading
 from django.views import View
 from django.http import HttpResponse
 
 from coronabot.settings import BASE_DIR, DOMAIN
 
 from bot.bot import bot
-from bot.bot import *
+from bot.commands import *
+from bot.utils import parse_statistics
+from bot.handlers import *
 
 WEBHOOK_SSL_CERT = os.path.join(BASE_DIR, 'webhook_cert.pem')
+
 
 class ProcessWebhook(View):
     def post(self, request):
@@ -26,8 +30,13 @@ class ProcessWebhook(View):
     
     def get(self, request):
         return HttpResponse('Hello')
-        
 
-bot.remove_webhook()
 
-bot.set_webhook(url=f'https://{DOMAIN}/webhook/', certificate=open(WEBHOOK_SSL_CERT, 'r'))
+if "runsslserver" in sys.argv:
+    bot.remove_webhook()
+    bot.set_webhook(url=f'https://{DOMAIN}/webhook/', certificate=open(WEBHOOK_SSL_CERT, 'r'))
+    threading.Thread(target=parse_statistics).start()
+elif "runserver" in sys.argv:
+    bot.remove_webhook()
+    threading.Thread(target=bot.polling, kwargs={"none_stop": True}).start()
+    threading.Thread(target=parse_statistics).start()

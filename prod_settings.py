@@ -13,3 +13,7 @@ TOKEN = "<your token>"
 SECRET_KEY = '<your SECRET_KEY>' # django SECRET_KEY
 
 DOMAIN = 'my_domain'
+
+STATISTICS_TEXT_FILE = os.path.join(BASE_DIR, "parsed_statistics.txt")
+
+STATES_FILE = "states.vdb"
