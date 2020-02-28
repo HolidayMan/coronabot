@@ -1,4 +1,9 @@
-from .utils import parse_statistics
-import schedule
+from .utils import parse_statistics, send_statistics
+import time
 
-schedule.every().hour.do(job)
+
+def do_all(timeout=43200):
+    while True:
+        parse_statistics()
+        send_statistics()
+        time.sleep(timeout)

@@ -1,6 +1,5 @@
 from telebot import types
 
-
 deleteKeyboard = types.ReplyKeyboardRemove()
 
 INF_STATISCTICS_BUTTON = types.KeyboardButton("Статистика заражений")
@@ -14,7 +13,7 @@ MOSCOW_BUTTON = types.KeyboardButton("Москва")
 MO_BUTTON = types.KeyboardButton("МО")
 ANOTHER_CITY_BUTTON = types.KeyboardButton("Другой город")
 
-MENU_KEYBOARD = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1, one_time_keyboard=True)
+MENU_KEYBOARD = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1, one_time_keyboard=False)
 MENU_KEYBOARD.add(INF_STATISCTICS_BUTTON, CORONAVIRUS_PROTECTION_BUTTON, BUY_KIT_BUTT0N, OUR_CHANNEL_BUTTON)
 
 BUY_KEYBOARD = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1, one_time_keyboard=True)

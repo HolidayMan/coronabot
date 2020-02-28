@@ -1,10 +1,11 @@
-import time
 from vedis import Vedis
 
+from .bot import bot
 from .models import TgUser
 from coronabot.settings import STATISTICS_TEXT_FILE, STATES_FILE
 from .parser import build_tg_message
 from .states import States
+
 
 def user_exists(message) -> bool:
     return TgUser.objects.filter(tg_id=message.chat.id).exists()
@@ -42,18 +43,23 @@ def set_menu_state(user_id):
 
 
 def parse_statistics():
-
-    while True:
-        try:
-            message = build_tg_message()
-            with open(STATISTICS_TEXT_FILE, "w") as f:
+    try:
+        message = build_tg_message()
+        with open(STATISTICS_TEXT_FILE, "w") as f:
+            f.write(message)
+    except:
+        while True:
+            try:
+                message = build_tg_message()
                 f.write(message)
-            time.sleep(43200)
-        except:
-            while True:
-                try:
-                    message = build_tg_message()
-                    f.write(message)
-                    break
-                except:
-                    continue
+                break
+            except:
+                continue
+
+
+def send_statistics():
+    users = TgUser.objects.all()
+    statistics = get_statistics()
+    for user in users:
+        pass
+    bot.send_message(user.tg_id, statistics, parse_mode="HTML")
