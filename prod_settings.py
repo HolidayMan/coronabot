@@ -16,4 +16,4 @@ DOMAIN = 'my_domain'
 
 STATISTICS_TEXT_FILE = os.path.join(BASE_DIR, "parsed_statistics.txt")
 
-STATES_FILE = "states.vdb"
+STATES_FILE = os.path.join(BASE_DIR, "states.vdb")
