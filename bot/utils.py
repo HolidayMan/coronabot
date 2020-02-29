@@ -61,4 +61,7 @@ def send_statistics():
     users = TgUser.objects.all()
     statistics = get_statistics()
     for user in users:
-        bot.send_message(user.tg_id, statistics, parse_mode="HTML")
+        try:
+            bot.send_message(user.tg_id, statistics, parse_mode="HTML")
+        except:
+            continue
