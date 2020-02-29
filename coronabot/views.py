@@ -38,6 +38,6 @@ if "runsslserver" in sys.argv:
     threading.Thread(target=do_all).start()
 elif "runserver" in sys.argv:
     bot.remove_webhook()
-    print("STARTING")
     threading.Thread(target=bot.polling, kwargs={"none_stop": True}).start()
-    threading.Thread(target=do_all, args=(2, )).start()
+    threading.Thread(target=do_all).start()
+    # threading.Thread(target=do_all, args=(10, )).start()
