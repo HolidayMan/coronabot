@@ -130,3 +130,9 @@ dmypy.json
 
 parsed_statistics.txt
 bot.log
+
+bot/migrations/*
+states.vdb
+webhook_pkey.pem
+webhook_cert.pem
+.idea
