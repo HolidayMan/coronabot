@@ -42,10 +42,13 @@ def handle_city(message):
     if message.text == BACK_TO_MENU_BUTTON.text:
         return back_to_menu_handler(message)
     elif message.text == ANOTHER_CITY_BUTTON.text:
-        bot.send_message(message.chat.id, ph.ENTER_CITY, parse_mode="HTML", reply_markup=BACK_TO_MENU_KEYBOARD)
+        bot.send_message(message.chat.id, ph.ENTER_CITY, parse_mode="HTML", reply_markup=CHOOSE_CITY_KEYBOARD)
         bot.register_next_step_handler(message, handle_city)
         return
     else:
+        if not message.text:
+            bot.register_next_step_handler(message, handle_city)
+            return bot.send_message(message.chat.id, ph.INVALID_CITY, parse_mode="HTML", reply_markup=CHOOSE_CITY_KEYBOARD)
         user = TgUser.objects.get(tg_id=message.chat.id)
         new_order = Order(city=message.text, user=user)
         new_order.save()
@@ -60,6 +63,9 @@ def handle_address(message):
         order.delete()
         return back_to_menu_handler(message)
     else:
+        if not message.text:
+            bot.register_next_step_handler(message, handle_address)
+            return bot.send_message(message.chat.id, ph.INVALID_ADDRESS, parse_mode="HTML", reply_markup=BACK_TO_MENU_KEYBOARD)
         user = TgUser.objects.get(tg_id=message.chat.id)
         order = Order.objects.filter(user=user).order_by("-id")[0]
         order.address = message.text
@@ -74,10 +80,13 @@ def handle_phone(message):
         order = Order.objects.filter(user=user).order_by("-id")[0]
         order.delete()
         return back_to_menu_handler(message)
+    if not message.text:
+        bot.register_next_step_handler(message, handle_phone)
+        return bot.send_message(message.chat.id, ph.INVALID_PHONE, parse_mode="HTML", reply_markup=BACK_TO_MENU_KEYBOARD)
     phone_pattern = r"(\+)*(7|){0,1}([0-9]){7,11}$"
     if not re.match(phone_pattern, message.text):
         bot.register_next_step_handler(message, handle_phone)
-        return bot.send_message(message.chat.id, ph.INVALID_NUMBER, parse_mode="HTML", reply_markup=BACK_TO_MENU_KEYBOARD)
+        return bot.send_message(message.chat.id, ph.INVALID_PHONE, parse_mode="HTML", reply_markup=BACK_TO_MENU_KEYBOARD)
     else:
         user = TgUser.objects.get(tg_id=message.chat.id)
         order = Order.objects.filter(user=user).order_by("-id")[0]
@@ -93,6 +102,9 @@ def handle_amount(message):
         order = Order.objects.filter(user=user).order_by("-id")[0]
         order.delete()
         return back_to_menu_handler(message)
+    if not message.text:
+        bot.register_next_step_handler(message, handle_amount)
+        return bot.send_message(message.chat.id, ph.INVALID_AMOUNT, parse_mode="HTML", reply_markup=BACK_TO_MENU_KEYBOARD)
     try:
         amount = int(message.text)
         if not 0 < amount <= 10:
