@@ -1,3 +1,5 @@
+import time
+import logging
 from vedis import Vedis
 
 from .bot import bot
@@ -47,13 +49,17 @@ def parse_statistics():
         message = build_tg_message()
         with open(STATISTICS_TEXT_FILE, "w") as f:
             f.write(message)
-    except:
+    except Exception as e:
+        logging.warning(f"Statistics was not parsed", exc_info=e)
+        time.sleep(0.2)
         while True:
             try:
                 message = build_tg_message()
                 f.write(message)
                 break
-            except:
+            except Exception as e:
+                logging.warning(f"Statistics was not parsed", exc_info=e)
+                time.sleep(0.3)
                 continue
 
 
@@ -63,5 +69,6 @@ def send_statistics():
     for user in users:
         try:
             bot.send_message(user.tg_id, statistics, parse_mode="HTML")
-        except:
+        except Exception as e:
+            logging.warning(f"Statistics was not sent to user {user.tg_id}", exc_info=e)
             continue
